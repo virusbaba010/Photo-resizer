@@ -1,0 +1,19 @@
+# =============================================================================
+# IMAGE RESIZER AND COMPRESSOR - Python Dependencies
+# =============================================================================
+# 
+# Install these packages using: pip install -r requirements.txt
+#
+# =============================================================================
+
+# Flask - Lightweight web framework for Python
+# Used to create the web server and handle HTTP requests
+Flask==2.3.3
+
+# Pillow - Python Imaging Library (Fork)
+# Used for image processing (resize, compress, format conversion)
+Pillow==10.0.0
+
+# Werkzeug - WSGI utility library (comes with Flask)
+# Provides secure filename handling and other utilities
+Werkzeug==2.3.7

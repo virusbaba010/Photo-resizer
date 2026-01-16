@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer & Compressor | Online Photo Tool</title>
+    
+    <!-- Updated static file paths for Vercel -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ====================================================================
+         MAIN CONTAINER
+         ==================================================================== -->
+    <div class="container">
+        
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">📷</div>
+                <h1>Image Resizer & Compressor</h1>
+            </div>
+            <p class="tagline">
+                Resize and compress your photos for exam forms, government applications, 
+                and ID uploads. Quick, easy, and free!
+            </p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <h2>📤 Upload & Settings</h2>
+                
+                <form id="uploadForm" enctype="multipart/form-data">
+                    
+                    <!-- File Upload -->
+                    <div class="form-group">
+                        <label for="imageInput">Select Image</label>
+                        <div class="file-upload-wrapper" id="dropZone">
+                            <input 
+                                type="file" 
+                                id="imageInput" 
+                                name="image" 
+                                accept=".jpg,.jpeg,.png"
+                                required
+                            >
+                            <div class="file-upload-content">
+                                <div class="upload-icon">📁</div>
+                                <p class="upload-text">
+                                    <span class="highlight">Click to upload</span> 
+                                    or drag and drop
+                                </p>
+                                <p class="upload-hint">JPG, JPEG, or PNG (Max 16MB)</p>
+                            </div>
+                            <div class="file-selected" id="fileSelected">
+                                <span class="file-icon">✅</span>
+                                <span class="file-name" id="fileName"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Original Info -->
+                    <div class="original-info" id="originalInfo" style="display: none;">
+                        <h4>📊 Original Image Info</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Dimensions:</span>
+                                <span class="info-value" id="originalDimensions">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">File Size:</span>
+                                <span class="info-value" id="originalFileSize">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dimension Inputs -->
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="widthInput">
+                                Width (px)
+                                <span class="tooltip" title="Enter width in pixels">ℹ️</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                id="widthInput" 
+                                name="width" 
+                                value="200" 
+                                min="1" 
+                                max="5000"
+                                required
+                            >
+                        </div>
+                        <div class="form-group half">
+                            <label for="heightInput">
+                                Height (px)
+                                <span class="tooltip" title="Enter height in pixels">ℹ️</span>
+                            </label>
+                            <input 
+                                type="number" 
+                                id="heightInput" 
+                                name="height" 
+                                value="200" 
+                                min="1" 
+                                max="5000"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Preset Buttons -->
+                    <div class="presets">
+                        <label>Quick Presets:</label>
+                        <div class="preset-buttons">
+                            <button type="button" class="preset-btn" data-width="200" data-height="200">200×200</button>
+                            <button type="button" class="preset-btn" data-width="150" data-height="200">150×200</button>
+                            <button type="button" class="preset-btn" data-width="100" data-height="100">100×100</button>
+                            <button type="button" class="preset-btn" data-width="300" data-height="300">300×300</button>
+                            <button type="button" class="preset-btn" data-width="350" data-height="450">350×450</button>
+                            <button type="button" class="preset-btn" data-width="600" data-height="600">600×600</button>
+                        </div>
+                    </div>
+
+                    <!-- Max File Size -->
+                    <div class="form-group">
+                        <label for="maxSizeInput">
+                            Maximum File Size (KB)
+                            <span class="tooltip" title="Auto-adjusts quality to meet this limit">ℹ️</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            id="maxSizeInput" 
+                            name="maxSize" 
+                            value="50" 
+                            min="1" 
+                            max="10240"
+                            required
+                        >
+                        <div class="size-presets">
+                            <button type="button" class="size-preset-btn" data-size="20">20 KB</button>
+                            <button type="button" class="size-preset-btn" data-size="50">50 KB</button>
+                            <button type="button" class="size-preset-btn" data-size="100">100 KB</button>
+                            <button type="button" class="size-preset-btn" data-size="200">200 KB</button>
+                        </div>
+                    </div>
+
+                    <!-- Quality Slider -->
+                    <div class="form-group">
+                        <label for="qualitySlider">
+                            Image Quality: <span id="qualityValue">80</span>%
+                        </label>
+                        <div class="slider-container">
+                            <input 
+                                type="range" 
+                                id="qualitySlider" 
+                                name="quality" 
+                                min="1" 
+                                max="100" 
+                                value="80"
+                                class="quality-slider"
+                            >
+                            <div class="slider-labels">
+                                <span>Low (1)</span>
+                                <span>High (100)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Resize & Compress</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="preview-section">
+                <h2>🖼️ Preview & Download</h2>
+                
+                <!-- Loading -->
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Processing your image...</p>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-message" id="errorMessage" style="display: none;">
+                    <span class="error-icon">⚠️</span>
+                    <span class="error-text" id="errorText"></span>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage" style="display: none;">
+                    <span class="success-icon">✅</span>
+                    <span class="success-text" id="successText"></span>
+                </div>
+
+                <!-- Preview Container -->
+                <div class="preview-container" id="previewContainer">
+                    <div class="preview-placeholder" id="previewPlaceholder">
+                        <div class="placeholder-icon">🖼️</div>
+                        <p>Your processed image will appear here</p>
+                        <p class="placeholder-hint">Upload an image and click "Resize & Compress"</p>
+                    </div>
+                    
+                    <img 
+                        src="" 
+                        alt="Processed Image Preview" 
+                        id="previewImage" 
+                        class="preview-image"
+                        style="display: none;"
+                    >
+                </div>
+
+                <!-- Processed Info -->
+                <div class="processed-info" id="processedInfo" style="display: none;">
+                    <h4>📈 Processed Image Info</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">New Dimensions:</span>
+                            <span class="info-value" id="newDimensions">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Final File Size:</span>
+                            <span class="info-value highlight" id="newFileSize">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Final Quality:</span>
+                            <span class="info-value" id="finalQuality">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Size Reduction:</span>
+                            <span class="info-value" id="sizeReduction">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Button -->
+                <button type="button" class="download-btn" id="downloadBtn" style="display: none;">
+                    <span class="btn-icon">📥</span>
+                    <span class="btn-text">Download Image</span>
+                </button>
+
+                <!-- Filename Input -->
+                <div class="filename-input" id="filenameSection" style="display: none;">
+                    <label for="filenameInput">Custom Filename:</label>
+                    <input type="text" id="filenameInput" value="resized_image.jpg">
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                💡 <strong>Tip:</strong> Most exam forms require photos sized 
+                200×200 pixels with a maximum of 50 KB file size.
+            </p>
+            <p class="copyright">
+                ⚠️ <strong>Note:</strong> This site does not store any images. All processing 
+                is done in your browser for privacy and security.
+            </p>
+            <p class="copyright">
+                Made with ❤️ for students and job seekers by Virusbaba010 | 
+                <a href="#" id="howToUse">How to Use</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Updated JavaScript path -->
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
